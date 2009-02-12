@@ -10,12 +10,7 @@ if [ ! -f $RRDFILE ]; then
 fi
 
 
-#DAYCOLOR="#aaaa00"
-#DAYCOLOR="#227722"
 DAYCOLOR="#66aa66"
-# needs rrdtool-1.2.9 or higher.
-#export LANG=en_US.UTF-8
-#    --vertical-label="Temperature (°F)"
 
 rrdtool graph $IMAGEFILE3 \
     -A -w600 -h480 --imgformat=PNG \
@@ -23,10 +18,11 @@ rrdtool graph $IMAGEFILE3 \
     --vertical-label="Bytes/sec" \
     --start="-3 day" \
     --slope-mode \
+    --alt-autoscale-max \
     DEF:input=$RRDFILE:input:AVERAGE \
     DEF:output=$RRDFILE:output:AVERAGE \
-    LINE1:input#ff0000:"input" \
-    LINE1:output#0000ff:"output" \
+    LINE1:input#ff0000:"download" \
+    LINE1:output#0000ff:"upload" \
     VRULE:$(date -d 'today 0:00' +%s)$DAYCOLOR \
     VRULE:$(date -d '-1 day 0:00' +%s)$DAYCOLOR \
     VRULE:$(date -d '-2 day 0:00' +%s)$DAYCOLOR \
@@ -41,11 +37,12 @@ rrdtool graph $IMAGEFILE14 \
     --vertical-label="Bytes/sec" \
     --start="-14 day" \
     --slope-mode \
+    --alt-autoscale-max \
     --x-grid HOUR:8:DAY:1:DAY:1:0:"%a%d" \
     DEF:input=$RRDFILE:input:AVERAGE \
     DEF:output=$RRDFILE:output:AVERAGE \
-    LINE1:input#ff0000:"input" \
-    LINE1:output#0000ff:"output" \
+    LINE1:input#ff0000:"download" \
+    LINE1:output#0000ff:"upload" \
     VRULE:$(date -d 'today 0:00' +%s)$DAYCOLOR \
     VRULE:$(date -d '-1 day 0:00' +%s)$DAYCOLOR \
     VRULE:$(date -d '-2 day 0:00' +%s)$DAYCOLOR \
@@ -63,7 +60,9 @@ rrdtool graph $IMAGEFILE14 \
     VRULE:$(date -d '-14 day 0:00' +%s)$DAYCOLOR \
     COMMENT:"\\l" > /dev/null
 
-chcon -t httpd_sys_content_t $IMAGEFILE3 $IMAGEFILE14
+# If SELinux is in use, then you may need to authorize the generated
+# images to be readable by your webserver.
+#chcon -t httpd_sys_content_t $IMAGEFILE3 $IMAGEFILE14
 
 
 exit 0
