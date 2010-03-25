@@ -1,0 +1,5 @@
+This script will allow you to collect network utilization statistics
+from a 2Wire DSL router/gateway and generate graphs of them. It
+gathers the network information by requesting one of the monitoring
+pages within the web administration user-interface and extracting the
+raw byte totals, and then plotting the result using RRDtool.
