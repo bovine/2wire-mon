@@ -1,0 +1,59 @@
+
+For the latest version and installation instructions, please see
+http://jeff.bovine.net/2Wire_monitoring
+
+==Purpose==
+I recently subscribed to the AT&T U-verse VDSL service, and it came
+with a 2Wire 3800HGV-B router/gateway.
+
+Naturally I wanted to be able to monitor and measure the utilization
+of my connection so that I could verify that it was performing up to
+expectations.  Unfortunately, these routers do not appear to support
+SNMP, which is what one would normally use to monitor network
+equipment.  Luckily the router provides a web-based administrative
+interface that displays raw network metrics, which can be accessed by
+the web-scraping technique described here.
+
+This script will allow you to collect network utilization statistics
+from a 2Wire DSL router/gateway and generate graphs of them.
+
+==Prerequisites==
+
+This has been developed and tested against a 2Wire 3800HGV-B Gateway
+running version 5.29.105.94, but it might work with other 2Wire
+models.  I would appreciate receiving some feedback if it does.
+
+These scripts must be installed and configured to run from a separate
+computer located behind your 2Wire gateway.  I have chosen to run them
+from a Fedora 9 Linux system.  If you want to have continuous graphs,
+you'll need to have this computer online and running all of the time.
+
+You will need Perl, RRDtool, and the Perl RRD modules.  On
+Redhat/Fedora/CentOS Linux systems, you can install these dependencies
+with:
+
+ yum install rrdtool rrdtool-perl
+
+==Installation==
+
+# Download and extract the tarball into a directory of your choice.  I
+just run it from a "~/2wire/" sub-directory in my personal home
+directory.
+
+# Using a text editor, edit the "2wire.pl" script and change
+the line near the top with your router's administrative password.
+
+# Modify your crontab to run the "2wire.pl" and
+"gengraphs.sh" at some regular interval.  I have them both
+running once per minute, but you can choose to run them less
+frequently if you want.  Edit your crontab by running "crontab -e"
+
+
+Here is the crontab entry that I use:
+ * * * * * cd ~/2wire && ./2wire.pl && ./gengraphs.sh
+
+You may need to edit the "gengraphs.sh" script to change the
+directory where the generated graphs should be saved.  If you are
+familiar with the RRD graph syntax, you can also customize the
+formatting and appearance of the graphs.
+
