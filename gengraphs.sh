@@ -9,14 +9,17 @@ IMAGEFILE30=~/public_html/2wire/2wire30.png
 IMAGEFILE365=~/public_html/2wire/2wire365.png
 
 
+LABELTEXT="Cowhouse Bandwidth"
+DAYCOLOR="#66aa66"
+UPCOLOR="#0000ff"
+DOWNCOLOR="#ff0000"
+
+
 if [ ! -f $RRDFILE ]; then
     echo "Could not access $RRDFILE"
     exit 1
 fi
 
-
-LABELTEXT="Cowhouse Bandwidth"
-DAYCOLOR="#66aa66"
 
 
 rrdtool graph $IMAGEFILE1 \
@@ -29,8 +32,8 @@ rrdtool graph $IMAGEFILE1 \
     --x-grid MINUTE:15:HOUR:1:HOUR:3:0:"%X" \
     DEF:input=$RRDFILE:input:AVERAGE \
     DEF:output=$RRDFILE:output:AVERAGE \
-    LINE1:input#ff0000:"download" \
-    LINE1:output#0000ff:"upload" \
+    LINE1:input$DOWNCOLOR:"download" \
+    LINE1:output$UPCOLOR:"upload" \
     VRULE:$(date -d 'today 0:00' +%s)$DAYCOLOR \
     COMMENT:"\\l" >/dev/null
 
@@ -44,8 +47,8 @@ rrdtool graph $IMAGEFILE3 \
     --alt-autoscale-max \
     DEF:input=$RRDFILE:input:AVERAGE \
     DEF:output=$RRDFILE:output:AVERAGE \
-    LINE1:input#ff0000:"download" \
-    LINE1:output#0000ff:"upload" \
+    LINE1:input$DOWNCOLOR:"download" \
+    LINE1:output$UPCOLOR:"upload" \
     VRULE:$(date -d 'today 0:00' +%s)$DAYCOLOR \
     VRULE:$(date -d '-1 day 0:00' +%s)$DAYCOLOR \
     VRULE:$(date -d '-2 day 0:00' +%s)$DAYCOLOR \
@@ -64,8 +67,8 @@ rrdtool graph $IMAGEFILE14 \
     --x-grid HOUR:8:DAY:1:DAY:1:0:"%a%d" \
     DEF:input=$RRDFILE:input:AVERAGE \
     DEF:output=$RRDFILE:output:AVERAGE \
-    LINE1:input#ff0000:"download" \
-    LINE1:output#0000ff:"upload" \
+    LINE1:input$DOWNCOLOR:"download" \
+    LINE1:output$UPCOLOR:"upload" \
     VRULE:$(date -d 'today 0:00' +%s)$DAYCOLOR \
     VRULE:$(date -d '-1 day 0:00' +%s)$DAYCOLOR \
     VRULE:$(date -d '-2 day 0:00' +%s)$DAYCOLOR \
@@ -94,8 +97,8 @@ rrdtool graph $IMAGEFILE30 \
     --x-grid DAY:1:WEEK:1:WEEK:1:0:"%D" \
     DEF:input=$RRDFILE:input:AVERAGE \
     DEF:output=$RRDFILE:output:AVERAGE \
-    LINE1:input#ff0000:"download" \
-    LINE1:output#0000ff:"upload" \
+    LINE1:input$DOWNCOLOR:"download" \
+    LINE1:output$UPCOLOR:"upload" \
     VRULE:$(date -d 'today 0:00' +%s)$DAYCOLOR \
     VRULE:$(date -d '-1 day 0:00' +%s)$DAYCOLOR \
     VRULE:$(date -d '-2 day 0:00' +%s)$DAYCOLOR \
@@ -141,8 +144,8 @@ rrdtool graph $IMAGEFILE365 \
     --x-grid YEAR:1:MONTH:1:MONTH:1:0:"%b" \
     DEF:input=$RRDFILE:input:AVERAGE \
     DEF:output=$RRDFILE:output:AVERAGE \
-    LINE1:input#ff0000:"download" \
-    LINE1:output#0000ff:"upload" \
+    LINE1:input$DOWNCOLOR:"download" \
+    LINE1:output$UPCOLOR:"upload" \
     COMMENT:"\\l" > /dev/null
 
 
